@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String?
+  password  String
+  role      Role      @default(APPLICANT)
+  applications Application[]
+  onsiteResumeUrl    String?
+}
+
+model Job {
+  id          String         @id @default(cuid())
+  title       String
+  department  String
+  location    String
+  salary      String
+  status      JobStatus      @default(ACTIVE)
+  resumeRequired  Boolean         @default(true)
+  questions   Question[]
+  applications Application[]
+  createdAt   DateTime       @default(now())
+}
+
+model Application {
+  id          String    @id @default(cuid())
+  userId      String
+  jobId       String
+  resumeUrl   String?
+  answers     Json
+  status      AppStatus @default(PENDING)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  @@unique([userId, jobId])
+  user        User      @relation(fields: [userId], references: [id])
+  job         Job       @relation(fields: [jobId], references: [id])
+  actionLogs  ActionLog[]
+}
+
+model ActionLog {
+  id            String   @id @default(cuid())
+  application   Application @relation(fields: [applicationId], references: [id])
+  applicationId String
+  action        AppStatus
+  timestamp     DateTime @default(now())
+}
+
+
+model Question {
+  id       String  @id @default(cuid())
+  question String
+  jobId    String
+  job      Job     @relation(fields: [jobId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  APPLICANT
+}
+
+enum JobStatus {
+  ACTIVE
+  CLOSED
+}
+
+enum AppStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  ON_HOLD
+}
+
