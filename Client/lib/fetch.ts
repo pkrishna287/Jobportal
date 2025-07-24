@@ -1,5 +1,5 @@
 // Simple fetch utility for backend API calls
-const API_BASE_URL ='http://localhost:3000/api';
+const API_BASE_URL ='https://jobportal-a65e.onrender.com/api';
 
 // Helper function to get auth token
 const getAuthToken = () => localStorage.getItem('auth_token');
