@@ -6,7 +6,7 @@ import { registerSchema, loginSchema } from'../validations/authvalidation.js';
 import {isAuthenticated,isAdmin} from '../middleware/auth.js'
 
 router.post('/register', validate(registerSchema), register);
-router.post('/login', validate(loginSchema), login);
+router.post('/login', login);
 router.post('/logout', logout);
 router.get('/me',isAuthenticated ,currentUser); 
 
