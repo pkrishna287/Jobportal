@@ -17,7 +17,7 @@ app.use(cors({
     'http://localhost:4173',
     'http://10.208.171.161:4173',
     'http://localhost:8080',
-    'https://jobportal-mocha-gamma.vercel.app/'
+    'https://jobportal-mocha-gamma.vercel.app'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
